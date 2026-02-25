@@ -2,20 +2,29 @@
 
 ## Cursor Cloud specific instructions
 
-This repository (`ai_auction_search`) is currently a greenfield project with no source code, dependencies, or build infrastructure. The only file is `README.md`.
+### Services
 
-### Current state
+| Service | Directory | Port | Run Command |
+|---------|-----------|------|-------------|
+| Backend (FastAPI) | `backend/` | 8000 | `uvicorn main:app --host 0.0.0.0 --port 8000 --reload` |
+| Frontend (React/Vite) | `frontend/` | 5173 | `npx vite --host 0.0.0.0 --port 5173` |
 
-- **No programming language or framework** has been chosen yet.
-- **No package manager, dependency files, or lock files** exist.
-- **No services, databases, or external dependencies** are configured.
-- **No lint, test, or build commands** are available.
+### Running the application
 
-### When code is added
+1. Start the backend first (from `backend/` directory), then start the frontend (from `frontend/` directory).
+2. The frontend Vite dev server proxies `/api` requests to the backend at `localhost:8000`.
+3. After starting, load sample data via: `cd backend && curl -X POST http://localhost:8000/api/assets/upload -F "file=@sample_assets.xlsx"`
 
-Once source code and dependency files are added, future agents should:
+### Important notes
 
-1. Identify the package manager from lock files (`package-lock.json` → npm, `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `requirements.txt`/`pyproject.toml` → pip/uv, etc.).
-2. Install dependencies accordingly.
-3. Check `README.md` or any new documentation for build/run/test instructions.
-4. Update the VM environment setup script via `SetupVmEnvironment` to include the correct dependency install command.
+- ChromaDB telemetry warnings (`capture() takes 1 positional argument`) are harmless and can be ignored.
+- The default embedding model (`all-MiniLM-L6-v2` via ChromaDB/onnxruntime) is English-centric. For better Chinese text matching, consider switching to a multilingual or Chinese-specific model (e.g. `paraphrase-multilingual-MiniLM-L12-v2`).
+- ChromaDB data is persisted in `backend/chroma_data/` (gitignored). Deleting this directory resets the vector database.
+- `~/.local/bin` must be on PATH for the `uvicorn` command to work. The update script handles this.
+
+### Lint / Test / Build
+
+- **Frontend lint**: `cd frontend && npx eslint .`
+- **Frontend type check**: `cd frontend && npx tsc -b`
+- **Frontend build**: `cd frontend && npx vite build`
+- **Backend health check**: `curl http://localhost:8000/api/health`
