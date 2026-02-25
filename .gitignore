@@ -3,5 +3,7 @@ dist/
 __pycache__/
 *.pyc
 chroma_data/
-.env
+backend/.env
+backend/data/chroma_db/
+backend/data/app.db
 *.egg-info/
