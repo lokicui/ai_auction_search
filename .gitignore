@@ -1,1 +1,7 @@
-node_modules/\ndist/\n__pycache__/\n*.pyc\nchroma_data/\n.env\n*.egg-info/\n
+node_modules/
+dist/
+__pycache__/
+*.pyc
+chroma_data/
+.env
+*.egg-info/
